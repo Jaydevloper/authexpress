@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 
     router.use(express.json());
     router.use(express.urlencoded({extended:true}));
+    router.get('/signup' , (req,res) =>{
+        res.send('ok')
+    })
     router.post('/signup',  (req,res) =>{
             const{name,email,password} = req.body;
             if (!name || !email || !password){

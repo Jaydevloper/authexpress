@@ -9,8 +9,7 @@ mongoose.connect('mongodb+srv://jony:hfurewihfsihSUQiwd@cluster0.gcxoi8p.mongodb
 })
 app.use(routes)
 app.get('/', (req,res) =>{
-   
-    res.send('Nma gap')
+    res.status(200).json({message:"nfanj"})
 })
 //fiueioHUEFDHUEasdwq
 //hfurewihfsihSUQiwd
