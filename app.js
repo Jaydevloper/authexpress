@@ -1,18 +1,23 @@
 const express = require('express');
 const app = express();
-// const port = process.env.PORT || 5000;
-const mongoose = require('mongoose')
+const cors = require("cors");
 const routes = require('./routes/route')
+
 const port = process.env.PORT || 5000
-mongoose.connect('mongodb+srv://jony:hfurewihfsihSUQiwd@cluster0.gcxoi8p.mongodb.net/regis',() =>{
-    console.log("mongoose connect");
-})
+
+require('dotenv').config()
+
+const connect = require('./db/db')
+connect();
+
+app.use(cors());
 app.use(routes)
+
 app.get('/', (req,res) =>{
     res.status(200).json({message:"nfanj"})
 })
-//fiueioHUEFDHUEasdwq
-//hfurewihfsihSUQiwd
+
+//https://testexpressas.herokuapp.com/
 app.listen(port, () =>{
     console.log(`Server open the ${port}...`);
 })

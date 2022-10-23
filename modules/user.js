@@ -16,5 +16,8 @@ const userSchema = new mongoose.Schema({
         required:true
     }
 })
+
+
 const users = mongoose.model("users",userSchema)
 module.exports = users
+//dawadfasfaeafadaW 

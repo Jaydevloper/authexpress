@@ -1,19 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const users = require('../modules/user');
-const bcrypt = require('bcrypt');  
-
+const newUser = require('../modules/crud')
+const bcrypt = require('bcrypt');     
     router.use(express.json());
     router.use(express.urlencoded({extended:true}));
-    router.get('/signup' , (req,res) =>{
-        res.send('ok')
-    })
     router.post('/signup',  (req,res) =>{
-            const{name,email,password} = req.body;
+            const{name,email,password} = req.body;  
             if (!name || !email || !password){
                  res.status(400).json({error:"Please enter all required fileds"})
             }
-            if (password.length > 8){
+            if (password.length > 10){
                  res.status(400).json({
                     error:"Please enter a password at least 8 charecters"
                 })
@@ -28,9 +25,9 @@ const bcrypt = require('bcrypt');
                     const User = new users({
                         name,
                         email,
-                        password:hash
+                        password:hash 
                     });
-                    User.save()
+                    User.save() 
                     .then(User =>{
                         res.status(200).json({
                             message:"User created succssefully",
@@ -42,7 +39,7 @@ const bcrypt = require('bcrypt');
                     })
                 })
             })
-    });
+    }); 
     router.post ('/login' , (req,res) =>{
         const {email,password} = req.body;
         users.findOne({email})
@@ -60,4 +57,59 @@ const bcrypt = require('bcrypt');
             })
         })
     })
+    router.post('/user/create', (req,res) =>{
+        const{userName,userEmail} = req.body;
+        const user = new newUser({
+            userName,
+            userEmail
+        }) 
+        user.save()
+        res.status(200).json({message:'User created successfully!'})
+    })
+    router.delete('/user/delete/:id', (req, res) => {
+        newUser.deleteOne({_id: req.params.id}).then(
+          () => {
+            res.status(200).json({
+              message: 'Deleted!'
+            });
+          }
+        ).catch(
+          (error) => {
+            res.status(500).json({
+              error: error
+            });
+          }
+        );
+      });
+      router.put('/user/edit/:id', (req, res) => {
+        const{userName,userEmail} = req.body;
+        const thing = new newUser({
+          _id: req.params.id,
+          userName,
+          userEmail
+        });
+        newUser.updateOne({_id: req.params.id}, thing).then(
+          () => {
+            res.status(200).json({
+              message: 'Thing updated successfully!'
+            });
+          }
+        ).catch(
+          (error) => {
+            res.status(500).json({
+              error: error
+            }); 
+          }
+        );
+      });  
+    router.get(('/user') , (req,res) =>{
+        newUser.find()
+        .then((data) =>{
+            res.status(200).json(data)
+        })
+        .catch(err =>{
+            res.status(500).send(err)
+        })
+    })
+    
 module.exports = router;
